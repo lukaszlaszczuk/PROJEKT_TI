@@ -2,6 +2,7 @@
 import sys
 from datetime import datetime
 from xlwings import Book
+import matplotlib.pyplot as plt
 
 #import win32api
 
@@ -68,7 +69,13 @@ def clear_data():
     sheet.range('D2').options(transpose=True).value = ids
     sheet.range('E2').options(transpose=True).value = starosc
 
+#################################################
 
+    wiekklientow = []
+    for i in range(len(starosc)):
+        wiekklientow.append(starosc[i])
+
+###################################################3
     indeksyklientow =[]
     for i in range(len(firstnames)):
         indeksyklientow.append(ids[i])
@@ -149,7 +156,7 @@ def clear_data():
     cenyposzczegolnychzakupow = []
     for i in range(len(costs)):
         cenyposzczegolnychzakupow.append(costs[i])
-    #oraz numery klientów przy danych zakupach (używamy tego do wrzucenia danych)   
+    #oraz numery klientów przy danych zakupach (używamy tego do wrzucenia danych)
     indeksyzakupow = []#na stronę internetową
     for i in range(len(idshopping)):
         indeksyzakupow.append(idshopping[i])
@@ -258,6 +265,8 @@ def clear_data():
     sheet.range('A1').current_region.autofit()
 
 
+
+
     licznikzakupow = [0] * len(imionaklientow)#tworzymy listę z zerem dla kazdego klienta, ktore bedziemy zmieniac, jesli byly zakupy
     zostawionepieniadze = [0]*len(imionaklientow)#tak samo dla sumy pozostawionych pieniędzy
     for i in range(len(imionaklientow)):
@@ -266,19 +275,43 @@ def clear_data():
                 licznikzakupow[i] = licznikzakupow[i]+1
                 zostawionepieniadze[i] = zostawionepieniadze[i]+cenyposzczegolnychzakupow[j]
     calkowity_obrot=sum(zostawionepieniadze)
-    
-    
-#### HTML :
+
+################################
+    sredniakwota = []
+    for i in range(len(wiekklientow)):
+        if licznikzakupow[i] == 0:
+            sredniakwota.append(0)
+        else:
+            sredniakwota.append(zostawionepieniadze[i]/licznikzakupow[i])
+####################################
+
     def get_path(name): #funkcja pozwalająca zapisać pliki html do folderu w którym znajduje się makro.py
         from os.path import realpath, dirname, join
-        return join(dirname(realpath(__file__)), name) 
-    
+        return join(dirname(realpath(__file__)), name)
+
+################################
+
+    plt.scatter(wiekklientow,sredniakwota,marker='o',s=25,c='g')
+    plt.xlabel("Wiek klienta")
+    plt.title("Wykres punktowy")
+    plt.grid()
+    plt.ylabel("Średnia kwota wydanych pieniędzy")
+    plt.savefig(get_path("wykres.png"))
+
+
+
+####################################
+
+
+#### HTML :
+
+
     wb = Book.caller()
     def pisz(tekst): #funkcja do zapisywania kodu HTML przez Pythona
             tekst += "\n"
             f.write(tekst.encode("utf-8"))
     with open( get_path('Tabela.html'), "wb") as f:
-        
+
         pisz('<!DOCTYPE html>\n')
         pisz('<html>\n')
         pisz('<head>\n')
@@ -312,7 +345,7 @@ def clear_data():
         pisz('<th>Liczba zakupów</th>\n')
         pisz('<th>Suma pozostawionych pieniędzy</th>\n')
         pisz('</tr>\n')
-    
+
         for i in range(len(imionaklientow)):
                 pisz('<tr>\n')
                 pisz('<td>'+str(imionaklientow[i])+'</td>\n')
@@ -326,10 +359,10 @@ def clear_data():
 
         pisz('</body>\n')
         pisz('</html>\n')
-    
+
     with open( get_path('Podsumowanie.html'), "wb") as f:
-	
-        
+
+
         pisz('<!DOCTYPE html>\n')
         pisz('<html>\n')
         pisz('<head>\n')
@@ -354,7 +387,7 @@ def clear_data():
         pisz('</style>\n')
         pisz('</head>\n')
         pisz('<body style="background-color:powderblue;">\n')
-        
+
         pisz('<header>\n')
         pisz('<h1 style="font-family:arial;font-size:250%;text-align:center;color:blue;background-color:powderblue;">Podsumowanie</h1>\n')
         pisz('</header>\n')
@@ -372,10 +405,10 @@ def clear_data():
         pisz('<td>'+str(ostatni_data)+'</td>\n')
         pisz('</tr>\n')
         pisz('</table>\n')
-        
+
         #pisz('</div>\n')
         pisz('</body>\n')
-        pisz('</html>\n')   
+        pisz('</html>\n')
 
     with open( get_path('Autorzy.html'), "wb") as f:
         pisz('<!DOCTYPE html>\n')
@@ -392,7 +425,7 @@ def clear_data():
 
         pisz('</body>\n')
         pisz('</html>\n')
-        
+
     with open( get_path('stronaglowna.html'), "wb") as f:
         pisz('<!DOCTYPE html>\n')
         pisz('<html>\n')
@@ -405,12 +438,12 @@ def clear_data():
         pisz('background-color: #ddd;')
         pisz("font-family: 'Josefin Sans', sans-serif;")
         pisz('font-size: 16px;\n')
-        
+
         pisz('}\n')
         pisz('.container{')
         pisz('background-color: #9db7fe;')
         pisz('}')
-        
+
         pisz('nav ul{')
         pisz('margin: 50px;')
         pisz('padding: 20px;')
@@ -425,19 +458,19 @@ def clear_data():
         pisz('line-height:5em;')
         pisz('}')
         pisz('nav a {')
-        
+
         pisz('display: inline-block;')
         pisz('color: #000;')
         pisz('font-size: 150%;')
         pisz('text-decoration: none;')#brak podkreslenia
         pisz('}')
-        
-        
-        
+
+
+
         pisz('</style>\n')
-        
+
         pisz('</head>\n')
-        
+
         pisz('<body>')
         pisz('<div class="container">')
         pisz('<div class="header">')
@@ -457,6 +490,6 @@ def clear_data():
         pisz('</li>')
         pisz('</ul>')
         pisz('</nav>')
-        
+
         pisz('</body>\n')
         pisz('</html>\n')
