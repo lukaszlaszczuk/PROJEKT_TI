@@ -4,8 +4,6 @@ from datetime import datetime
 from xlwings import Book
 import matplotlib.pyplot as plt
 
-#import win32api
-
 
 
 def clear_data():
@@ -359,6 +357,8 @@ def clear_data():
                 pisz('<td>'+str(round(zostawionepieniadze[i],2))+' zł</td>')
         pisz('</tr>')
         pisz('</table>')
+        pisz('<br>')
+        pisz('<center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>')
         pisz('</body>')
         pisz('</html>')
 
@@ -376,14 +376,14 @@ def clear_data():
     body{
             background-color:powderblue;
             font-family: 'Josefin Sans', sans-serif;
-            }  
+            }
     header{
-            
+
             text-align:center;
             color:blue;
             }
     table {
-            
+
             border-collapse: collapse;
             width: 100%;
             }
@@ -419,26 +419,99 @@ def clear_data():
         pisz('<td>'+str(ostatni_data)+'</td>')
         pisz('</tr>')
         pisz('</table>')
-
+        pisz('<br>')
+        pisz('<center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>')
         #pisz('</div>\n')
         pisz('</body>')
         pisz('</html>')
 
     with open( get_path('Autorzy.html'), "wb") as f:
-        pisz('<!DOCTYPE html>\n')
-        pisz('<html>\n')
-        pisz('<head>\n')
-        pisz('<meta charset="utf-8"/>\n')
-        pisz('<title>Autorzy</title>\n')
-        pisz('</head>\n')
-        pisz('<body>\n')
-        pisz('<h2> Autorzy: </h2>\n')
-        pisz('<p> Łukasz Łaszczuk</p>\n')
-        pisz('<p> Dariusz Pałatyński</p>\n')
+        pisz(("""<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8"/>
+        <title>Wykresik</title>
+        </head>
+
+        <style>
+        body{
+        background-color: #ddd;
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 16px;
+
+        }
+        .container{
+        background-color: #9db7fe;
+        }
+        </style>
+        <body>
+        <h2><center> Informacje o autorach: </center></h2>
+        <br>
+        <h1><center> Mój skład ;) </center></h1>
+        <center><img src="sklad.png"></center>
+        <br>
+        <h1><center> Nasze miasto: </center></h1>
+        <br>
+        <center>
+        <div id="map" style="width:400px;height:400px;"></div>
+
+        <script>
+        function myMap() {
+            var mapOptions = {
+                center: new google.maps.LatLng(51.107226, 17.062014),
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"> </script>
+        </center>
+
+        <br>
+        <center><iframe width="420" height="315"
+        src="https://www.youtube.com/embed/tgbNymZ7vqY">
+        </iframe> </center>
+        <br>
+
+        <center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>
+        <br>
 
 
-        pisz('</body>\n')
-        pisz('</html>\n')
+        </body>
+        </html>"""))
+
+
+    with open( get_path('Wykres.html'), "wb") as f:
+        pisz(("""<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8"/>
+        <title>Wykresik</title>
+        </head>
+
+        <style>
+        body{
+        background-color: #ddd;
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 16px;
+
+        }
+        .container{
+        background-color: #9db7fe;
+        }
+        </style>
+        <body>
+        <h2><center> Zadanie dodatkowe (wykres): </center></h2>
+        <br>
+        <center><img src="wykres.png"></center>
+        <br>
+        <center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>
+
+
+
+        </body>
+        </html>"""))
 
     with open( get_path('stronaglowna.html'), "wb") as f:
         pisz('<!DOCTYPE html>\n')
@@ -495,6 +568,9 @@ def clear_data():
         pisz('<ul>')
         pisz('<li>')
         pisz('<a href="Podsumowanie.html">Podsumowanie</a>')
+        pisz('</li>')
+        pisz('<li>')
+        pisz('<a href="Wykres.html">Wykres</a>')
         pisz('</li>')
         pisz('<li>')
         pisz('<a href="Tabela.html">Tabelka klientów</a>')
