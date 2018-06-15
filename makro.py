@@ -312,103 +312,117 @@ def clear_data():
             f.write(tekst.encode("utf-8"))
     with open( get_path('Tabela.html'), "wb") as f:
 
-        pisz('<!DOCTYPE html>\n')
-        pisz('<html>\n')
-        pisz('<head>\n')
-        pisz('<meta charset="utf-8"/>\n')
-        pisz('<title>Tabela</title>\n')
-        pisz('</head>\n')
-        pisz('<style>\n')
-        pisz('table {\n')
-        pisz('font-family: arial, sans-serif;\n')
-        pisz('border-collapse: collapse;\n')
-        pisz('width: 100%;\n')
-        pisz('}\n')
+        pisz(("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Tabela</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+</head>
 
-        pisz('td, th {\n')
-        pisz('border: 1px solid #dddddd;\n')
-        pisz('text-align: left;\n')
-        pisz('padding: 8px;\n')
-        pisz('}\n')
+<style>
+    table {
+       font-family: 'Josefin Sans', sans-serif;
+       border-collapse: collapse;
+       width: 100%;
+       }
 
-        pisz('tr:nth-child(even) {\n')
-        pisz('background-color: #dddddd;\n')
-        pisz('}\n')
-        pisz('</style>\n')
-        pisz('<body>\n')
+    td, th {
+        border: 1px solid #dddddd; text-align: left;
+        padding: 8px;
+        }
 
-        pisz('<table>\n') #tabelka z danymi
-        pisz('<tr>\n')
-        pisz('<th>Imię</th>\n')
-        pisz('<th>Nazwisko</th>\n')
-        pisz('<th>Sumaryczna liczba produktów</th>\n')
-        pisz('<th>Liczba zakupów</th>\n')
-        pisz('<th>Suma pozostawionych pieniędzy</th>\n')
-        pisz('</tr>\n')
+    tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+</style>
+
+<body>
+
+    <table>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Sumaryczna liczba produktów</th>
+            <th>Liczba zakupów</th>
+            <th>Suma pozostawionych pieniędzy</th>
+        </tr>
+"""))
 
         for i in range(len(imionaklientow)):
-                pisz('<tr>\n')
-                pisz('<td>'+str(imionaklientow[i])+'</td>\n')
-                pisz('<td>'+str(nazwiskaklientow[i])+'</td>\n')
-                pisz('<td>'+str(int(listawszystkichzakupow[i]))+'</td>\n')
-                pisz('<td>'+str(licznikzakupow[i])+'</td>\n')
-                pisz('<td>'+str(round(zostawionepieniadze[i],2))+' zł</td>\n')
-        pisz('<tr>\n')
-
-        pisz('</table>\n')
-
-        pisz('</body>\n')
-        pisz('</html>\n')
+                pisz('<tr>')
+                pisz('<td>'+str(imionaklientow[i])+'</td>')
+                pisz('<td>'+str(nazwiskaklientow[i])+'</td>')
+                pisz('<td>'+str(int(listawszystkichzakupow[i]))+'</td>')
+                pisz('<td>'+str(licznikzakupow[i])+'</td>')
+                pisz('<td>'+str(round(zostawionepieniadze[i],2))+' zł</td>')
+        pisz('</tr>')
+        pisz('</table>')
+        pisz('</body>')
+        pisz('</html>')
 
     with open( get_path('Podsumowanie.html'), "wb") as f:
 
 
-        pisz('<!DOCTYPE html>\n')
-        pisz('<html>\n')
-        pisz('<head>\n')
-        pisz('<meta charset="utf-8"/>\n')
-        pisz('<title>Podsumowanie</title>\n')
-        pisz('<style>\n')
-        pisz('table {\n')
-        pisz('font-family: arial, sans-serif;\n')
-        pisz('border-collapse: collapse;\n')
-        pisz('width: 100%;\n')
-        pisz('}\n')
+        pisz(("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Podsumowanie</title>
+</head>
+<style>
+    body{
+            background-color:powderblue;
+            font-family: 'Josefin Sans', sans-serif;
+            }  
+    header{
+            
+            text-align:center;
+            color:blue;
+            }
+    table {
+            
+            border-collapse: collapse;
+            width: 100%;
+            }
 
-        pisz('td, th {\n')
-        pisz('border: 1px solid #dddddd;\n')
-        pisz('text-align: left;\n')
-        pisz('padding: 8px;\n')
-        pisz('}\n')
+    td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            }
 
-        pisz('tr:nth-child(even) {\n')
-        pisz('background-color: #dddddd;\n')
-        pisz('}\n')
-        pisz('</style>\n')
-        pisz('</head>\n')
-        pisz('<body style="background-color:powderblue;">\n')
+    tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+</style>
 
-        pisz('<header>\n')
-        pisz('<h1 style="font-family:arial;font-size:250%;text-align:center;color:blue;background-color:powderblue;">Podsumowanie</h1>\n')
-        pisz('</header>\n')
-        pisz('<table>\n')
-        pisz('<tr>\n')
-        pisz('<th>Ilość klientów</th>\n')
-        pisz('<td>'+str(len(imionaklientow))+'</td>\n')
-        pisz('</tr>\n')
-        pisz('<tr>\n')
-        pisz('<th>Całkowity obrót</th>\n')
-        pisz('<td>'+str(calkowity_obrot)+' zł</td>\n')
-        pisz('</tr>\n')
-        pisz('<tr>\n')
-        pisz('<th>Data ostatniej sprzedaży</th>\n')
-        pisz('<td>'+str(ostatni_data)+'</td>\n')
-        pisz('</tr>\n')
-        pisz('</table>\n')
+<body>
+
+        <header>
+            <h1>Podsumowanie</h1>
+        </header>
+        <table>
+            <tr>
+            <th>Ilość klientów</th>
+            """))
+        pisz('<td>'+str(len(imionaklientow))+'</td>')
+        pisz('</tr>')
+        pisz('<tr>')
+        pisz('<th>Całkowity obrót</th>')
+        pisz('<td>'+str(calkowity_obrot)+' zł</td>')
+        pisz('</tr>')
+        pisz('<tr>')
+        pisz('<th>Data ostatniej sprzedaży</th>')
+        pisz('<td>'+str(ostatni_data)+'</td>')
+        pisz('</tr>')
+        pisz('</table>')
 
         #pisz('</div>\n')
-        pisz('</body>\n')
-        pisz('</html>\n')
+        pisz('</body>')
+        pisz('</html>')
 
     with open( get_path('Autorzy.html'), "wb") as f:
         pisz('<!DOCTYPE html>\n')
@@ -433,10 +447,10 @@ def clear_data():
         pisz('<meta charset="utf-8"/>\n')
         pisz('<title>Strona główna</title>')
         pisz('<link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">')
-        pisz('<style>')
+        pisz('<style>')#css
         pisz('body{')
         pisz('background-color: #ddd;')
-        pisz("font-family: 'Josefin Sans', sans-serif;")
+        pisz("font-family: 'Josefin Sans', sans-serif;")#ustawienie czcionki
         pisz('font-size: 16px;\n')
 
         pisz('}\n')
