@@ -1,12 +1,11 @@
-﻿import os
-import sys
-from datetime import datetime
+﻿from datetime import datetime
 from xlwings import Book
 import matplotlib.pyplot as plt
 
 
 
 def clear_data():
+ 
     # Nazwa arkusza źródłowego
     sheet_name = "Klient"
     # Nazwa arkusza na wyniki
@@ -85,10 +84,6 @@ def clear_data():
     nazwiskaklientow = []
     for i in range(len(surnames)):
         nazwiskaklientow.append(surnames[i])
-
-
-
-
     # Ustawienie rozmiaru
     #  http://docs.xlwings.org/en/stable/api.html#xlwings.Range.autofit
     sheet.range('A1').current_region.autofit()
@@ -275,7 +270,7 @@ def clear_data():
     calkowity_obrot=sum(zostawionepieniadze)
 
 ################################
-    sredniakwota = []
+    sredniakwota = [] #lista pomocnicza do zadania dodatkowego(tworzenie wykresu srednich wydatkow)
     for i in range(len(wiekklientow)):
         if licznikzakupow[i] == 0:
             sredniakwota.append(0)
@@ -288,7 +283,7 @@ def clear_data():
         return join(dirname(realpath(__file__)), name)
 
 ################################
-
+#tworzymy wykres  w matplotlibie
     plt.scatter(wiekklientow,sredniakwota,marker='o',s=25,c='g')
     plt.xlabel("Wiek klienta")
     plt.title("Wykres punktowy")
@@ -308,97 +303,163 @@ def clear_data():
     def pisz(tekst): #funkcja do zapisywania kodu HTML przez Pythona
             tekst += "\n"
             f.write(tekst.encode("utf-8"))
-    with open( get_path('Tabela.html'), "wb") as f:
-
+    with open( get_path('stronaglowna.html'), "wb") as f:
+        #docstringi ułatwiają zapis kodu strony internetowej i ich przejrzystosć
         pisz(("""
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <meta charset="utf-8"/>
-    <title>Tabela</title>
+    <meta charset="utf-8"/>\
+    <title>Strona główna</title>
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png"/>
+    <style>
+        
+        body{
+            background-color: #ddd;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 16px;
+        }
+        .naglowek{
+            font-size:200%;
+            text-align:center;
+            color:blue;
+            background-color:#ddd;
+            padding:0.7em
+        }
+            
+        .container{
+            background-color: #9db7fe;
+        }
+        
+        .glowny{
+            background-color: #9db7fe;
+            text-align: center;
+        }
+        p{
+        display: inline-block;
+        font-size: 100%;
+        font-style: italic;
+        text-align:center;
+        
+        }
+        nav ul{
+            margin: 5px;
+            padding: 5px;
+            text-align: center;
+        }
+        nav li {
+            display: inline-block;
+            width: 200px;
+            border-width: 3px;
+            margin: 15px;
+            border-style: dotted;
+            line-height:5em;
+        }
+        nav a {
+            display: inline-block;
+            color: #000;
+            font-size: 150%;
+            text-decoration: none;
+        }
+    </style>
+
 </head>
-
-<style>
-    table {
-       font-family: 'Josefin Sans', sans-serif;
-       border-collapse: collapse;
-       width: 100%;
-       }
-
-    td, th {
-        border: 1px solid #dddddd; text-align: left;
-        padding: 8px;
-        }
-
-    tr:nth-child(even) {
-        background-color: #dddddd;
-        }
-</style>
-
 <body>
-
-    <table>
-        <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Sumaryczna liczba produktów</th>
-            <th>Liczba zakupów</th>
-            <th>Suma pozostawionych pieniędzy</th>
-        </tr>
+    <div class="container">
+    <div class="naglowek">
+        <header>
+            <h1>Strona główna</h1>
+        </header>
+    </div>
+    <div class="glowny">
+        <nav>
+        <ul>
+            <li>
+                <a href="Podsumowanie.html">Podsumowanie</a>
+            </li>
+            <li>
+                <a href="Tabela.html">Tabelka klientów</a>
+            </li>
+            <li>
+                <a href="Wykres.html">Wykres</a>
+            </li>
+            <li>
+                <a href="Autorzy.html">O autorach</a>
+            </li>
+        </ul>
+        </nav>
+        <picture>
+            <source media="(min-width: 850px)" srcset="logo.png">
+            <source media="(min-width: 650px)" srcset="w13.jpg">
+            <img src="herb.jpg" alt="Herb Wrocławia" style= "width: auto;">
+        </picture>
+        <br>
+        <br>
+        <p>Strona przygotowana w ramach projektu z Technologii Informacyjnych</p>
+    </div>
+    </div>
+</body>
+</html>
 """))
-
-        for i in range(len(imionaklientow)):
-                pisz('<tr>')
-                pisz('<td>'+str(imionaklientow[i])+'</td>')
-                pisz('<td>'+str(nazwiskaklientow[i])+'</td>')
-                pisz('<td>'+str(int(listawszystkichzakupow[i]))+'</td>')
-                pisz('<td>'+str(licznikzakupow[i])+'</td>')
-                pisz('<td>'+str(round(zostawionepieniadze[i],2))+' zł</td>')
-        pisz('</tr>')
-        pisz('</table>')
-        pisz('<br>')
-        pisz('<center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>')
-        pisz('</body>')
-        pisz('</html>')
-
+            
+            
     with open( get_path('Podsumowanie.html'), "wb") as f:
-
-
         pisz(("""
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
     <meta charset="utf-8"/>
     <title>Podsumowanie</title>
-</head>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png"/>
 <style>
     body{
-            background-color:powderblue;
+            background-color: #9db7fe;
             font-family: 'Josefin Sans', sans-serif;
-            }
+    }
     header{
 
             text-align:center;
-            color:blue;
-            }
+    }
     table {
 
             border-collapse: collapse;
             width: 100%;
-            }
+    }
 
     td, th {
             border: 1px solid #dddddd;
+            
             text-align: left;
             padding: 8px;
-            }
+    }
 
     tr:nth-child(even) {
             background-color: #dddddd;
-            }
-</style>
+    }
+    .button {
+        font-family: 'Josefin Sans', sans-serif;
+        position:absolute;
+        transition: .5s ease;
+        left: 40%;
+        display: block;
 
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #47d74d;
+        border: none;
+        color:black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+</style>
+</head>
 <body>
 
         <header>
@@ -420,166 +481,281 @@ def clear_data():
         pisz('</tr>')
         pisz('</table>')
         pisz('<br>')
-        pisz('<center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>')
-        #pisz('</div>\n')
+        pisz('<a href="stronaglowna.html" class="button">Powrót do strony głównej</a>')
+        
+        pisz('</body>')
+        pisz('</html>')
+    with open( get_path('Tabela.html'), "wb") as f:
+
+        pisz(("""
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <title>Tabela</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png"/>
+<style>
+    body{
+    background-color: #dddddd
+    }
+    table {
+       font-family: 'Josefin Sans', sans-serif;
+       background-color: #dddddd;
+       border-collapse: collapse;
+       width: 100%;
+       }
+
+    td, th {
+        border: 1px solid black; text-align: left;
+        padding: 8px;
+        }
+
+    tr:nth-child(even) {
+        background-color: #9db7fe;
+        }
+    
+    
+            
+    
+    .button {
+        font-family: 'Josefin Sans', sans-serif;
+        position:absolute;
+        transition: .5s ease;
+        left: 40%;
+        display: block;
+
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #47d74d;
+        border: none;
+        color:black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        
+    }
+</style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Sumaryczna liczba produktów</th>
+            <th>Liczba zakupów</th>
+            <th>Suma pozostawionych pieniędzy</th>
+        </tr>
+"""))#tworzymy tabelkę
+          #sciągamy dane z poprzednio utworzonych list  
+        for i in range(len(imionaklientow)): #dla kazdego klienta
+                pisz('<tr>')#tworzymy wiersz
+                pisz('<td>'+str(imionaklientow[i])+'</td>')#dodajemy imię, sumę produktów i wydaną sumę
+                pisz('<td>'+str(nazwiskaklientow[i])+'</td>')
+                pisz('<td>'+str(int(listawszystkichzakupow[i]))+'</td>')
+                pisz('<td>'+str(licznikzakupow[i])+'</td>')
+                pisz('<td>'+str(round(zostawionepieniadze[i],2))+' zł</td>')
+        pisz('</tr>')
+        pisz('</table>')
+        pisz('<br>')  #odnosnik do strony głównej
+        pisz('<a href="stronaglowna.html" class="button">Powrót do strony głównej</a>')
         pisz('</body>')
         pisz('</html>')
 
-    with open( get_path('Autorzy.html'), "wb") as f:
-        pisz(("""<!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset="utf-8"/>
-        <title>Wykresik</title>
-        </head>
-
-        <style>
-        body{
-        background-color: #ddd;
+    with open( get_path('Wykres.html'), "wb") as f:
+        pisz(("""
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <title>Wykresik</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png"/>
+<style>
+    body{
+        background-color: #9db7fe;
         font-family: 'Josefin Sans', sans-serif;
         font-size: 16px;
+    }
+    h1{
+        
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 200%;
+        font-weight: bold;
+        text-align: center;
+    }
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+    
+            
+    
+    .button {
+        position:absolute;
+        transition: .5s ease;
+        left: 40%;
+        display: block;
 
-        }
-        .container{
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #47d74d;
+        border: none;
+        color:black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        
+    }
+</style>
+</head>
+<body>
+    <h1> Zadanie dodatkowe (wykres): </h1>
+    <br>
+    <img src="wykres.png" alt="Wykres" class="center">
+    <br>
+    <a href="stronaglowna.html" class="button">Powrót do strony głównej</a>
+    
+    
+    
+</body>
+</html>
+"""))
+    with open( get_path('Autorzy.html'), "wb") as f:
+        pisz(("""
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <title>Autorzy</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png"/>
+<style>
+    body{
         background-color: #9db7fe;
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 16px;
         }
-        </style>
-        <body>
-        <h2><center> Informacje o autorach: </center></h2>
-        <br>
-        <h1><center> Mój skład ;) </center></h1>
-        <center><img src="sklad.png"></center>
-        <br>
-        <h1><center> Nasze miasto: </center></h1>
-        <br>
-        <center>
-        <div id="map" style="width:400px;height:400px;"></div>
+    .naglowek{
+        font-size:200%;
+        text-align:center;
+        color:blue;
+        background-color:#ddd;
+        padding:0.7em
+    }
+    .inne{
+        font-size:125%;
+        background-color:#ddd;
+    }
+    h1{  color:blue;
+          text-align:center;
+          
+    }
+    h2{   color:blue;
+          text-align:center;
+          font-size:175%;}
+    p{
+      
+      padding: 50px;
+      font-size:125%;
+      font-style: italic;
+    }
+    .column{
+        box-sizing: border-box;
+        float: left;
+        width: 50%;
+        padding: 10px;
+    }
+    .row::after{
+        content:"";
+        clear: both;
+        display:table;
+    }
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+    .button {
+        position:absolute;
+        transition: .5s ease;
+        left: 40%;
+        display: block;
 
-        <script>
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #47d74d;
+        border: none;
+        color:black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        
+    }
+</style>
+</head>
+<body>
+    <div class="naglowek">
+    <h1> Informacje o autorach:</h1>
+    <br>
+    </div>
+    <div class="inne">
+    <p>Projekt wykonali: Łukasz Łaszczuk oraz Dariusz Pałatyński. Żeby nie było tak nudno, to
+    przygotowaliśmy kilka informacji o nas ;D.</p>
+    <h2>Skład Darka ;)</h2>
+    <img src="sklad.png" alt="Wykres" class="center">
+    <br>
+    <br>
+    <h2>Nasza uczelnia i ulubiony sport:</h2>
+    <br>
+    
+    <div class="row">
+    <div class="column">
+    
+    <div id="map" style="width:430px;height:260px;;padding:10px;" class="center"></div>
+    <script>
         function myMap() {
             var mapOptions = {
                 center: new google.maps.LatLng(51.107226, 17.062014),
-                zoom: 10,
+                zoom: 15,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             }
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
         }
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"> </script>
-        </center>
-
-        <br>
-        <center><iframe width="420" height="315"
-        src="https://www.youtube.com/embed/tgbNymZ7vqY">
-        </iframe> </center>
-        <br>
-
-        <center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>
-        <br>
-
-
-        </body>
-        </html>"""))
-
-
-    with open( get_path('Wykres.html'), "wb") as f:
-        pisz(("""<!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset="utf-8"/>
-        <title>Wykresik</title>
-        </head>
-
-        <style>
-        body{
-        background-color: #ddd;
-        font-family: 'Josefin Sans', sans-serif;
-        font-size: 16px;
-
-        }
-        .container{
-        background-color: #9db7fe;
-        }
-        </style>
-        <body>
-        <h2><center> Zadanie dodatkowe (wykres): </center></h2>
-        <br>
-        <center><img src="wykres.png"></center>
-        <br>
-        <center><a href="stronaglowna.html"><input type="submit" name="powrot" value="Powrót do strony głównej"></a></center>
-
-
-
-        </body>
-        </html>"""))
-
-    with open( get_path('stronaglowna.html'), "wb") as f:
-        pisz('<!DOCTYPE html>\n')
-        pisz('<html>\n')
-        pisz('<head>\n')
-        pisz('<meta charset="utf-8"/>\n')
-        pisz('<title>Strona główna</title>')
-        pisz('<link href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;subset=latin-ext" rel="stylesheet">')
-        pisz('<style>')#css
-        pisz('body{')
-        pisz('background-color: #ddd;')
-        pisz("font-family: 'Josefin Sans', sans-serif;")#ustawienie czcionki
-        pisz('font-size: 16px;\n')
-
-        pisz('}\n')
-        pisz('.container{')
-        pisz('background-color: #9db7fe;')
-        pisz('}')
-
-        pisz('nav ul{')
-        pisz('margin: 50px;')
-        pisz('padding: 20px;')
-        pisz('text-align: center;')
-        pisz('}')
-        pisz('nav li {')
-        pisz('display: inline-block;')
-        pisz('width: 220px;')
-        pisz('border-width: 3px;')
-        pisz('margin: 30px;')
-        pisz('border-style: dotted;')
-        pisz('line-height:5em;')
-        pisz('}')
-        pisz('nav a {')
-
-        pisz('display: inline-block;')
-        pisz('color: #000;')
-        pisz('font-size: 150%;')
-        pisz('text-decoration: none;')#brak podkreslenia
-        pisz('}')
-
-
-
-        pisz('</style>\n')
-
-        pisz('</head>\n')
-
-        pisz('<body>')
-        pisz('<div class="container">')
-        pisz('<div class="header">')
-        pisz('<header>')
-        pisz('<h1 style="font-size:400%;text-align:center;color:blue;background-color:#ddd; padding:1.25em">Strona główna</h1>\n')
-        pisz('</header>')
-        pisz('<nav>')
-        pisz('<ul>')
-        pisz('<li>')
-        pisz('<a href="Podsumowanie.html">Podsumowanie</a>')
-        pisz('</li>')
-        pisz('<li>')
-        pisz('<a href="Wykres.html">Wykres</a>')
-        pisz('</li>')
-        pisz('<li>')
-        pisz('<a href="Tabela.html">Tabelka klientów</a>')
-        pisz('</li>')
-        pisz('<li>')
-        pisz('<a href="Autorzy.html">O autorach</a>')
-        pisz('</li>')
-        pisz('</ul>')
-        pisz('</nav>')
-
-        pisz('</body>\n')
-        pisz('</html>\n')
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=myMap" class="center"> </script>
+    
+    
+    </div>
+    <div class="column">
+    <iframe style="width:498px; height:276px"
+    src="forest2.gif">
+    </iframe> 
+    </div>
+    </div>
+    <p style="text-align:center">P.S. Życzymy powodzenia w półmaratonie!</p>
+    <a href="stronaglowna.html" class="button">Powrót do strony głównej</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    </div>
+</body>
+</html>
+"""))
